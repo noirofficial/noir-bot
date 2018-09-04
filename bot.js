@@ -65,7 +65,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
 function help(channelID){
     var msg = '```Markdown\n';
-    msg += 'zoin-bit - Help\n';
+    msg += 'Zoin-bot - Help\n';
     msg += '--------------------------------------\n\n';
     msg += 'Command List:\n';
     msg += '\n!help:        This command list';
@@ -188,7 +188,7 @@ function getCoinmarketcapData(callback) {
                     message: '**Error:** CoinMarketCap API seems to be in trouble. Try again later!'
                     });
         } else {
-            let json = JSON.parse(body)
+            const json = JSON.parse(body)
             callback(json);
         }
     });
