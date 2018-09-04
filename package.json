@@ -1,0 +1,13 @@
+{
+  "name": "zoin-bot",
+  "version": "1.0.0",
+  "description": "Zoin Discord bot",
+  "main": "bot.js",
+  "author": "flo071",
+  "dependencies": {
+    "discord.io": "github:woor/discord.io#gateway_v6",
+    "got": "^7.1.0",
+    "winston": "^2.3.1",
+    "request": "^2.85.0"
+  }
+}
