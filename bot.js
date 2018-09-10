@@ -58,6 +58,9 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             case 'hash':
                 hash(channelID);
                 break;
+            case 'znValue':
+                znValue(channelID);
+                break;
             default: //do nothing
         }
     }
@@ -75,6 +78,7 @@ function help(channelID){
     msg += '\n!diff:        Zoin network difficullty';
     msg += '\n!block:       Zoin network block height';
     msg += '\n!hash:        Zoin network hashrate';
+    msg += '\n!znValue:     Zoinode Value';
     msg += '```';
     
     bot.sendMessage({to: channelID, message: msg});
@@ -114,7 +118,7 @@ function priceUSD(channelID){
     got('https://api.coingecko.com/api/v3/coins/zoin', { json: true }).then(response => {
         console.log(response.body.market_data.current_price.usd);
         var msg = '```md\n';
-        msg += 'Zoin - Price USD\n';
+        msg += 'Zoin - Price US Dollar\n';
         msg += '--------------------------\n\n';
         msg += 'USD: $' + response.body.market_data.current_price.usd;
         msg += '```';
@@ -128,7 +132,7 @@ function priceEUR(channelID){
     got('https://api.coingecko.com/api/v3/coins/zoin', { json: true }).then(response => {
         console.log(response.body.market_data.current_price.eur);
         var msg = '```md\n';;
-        msg += 'Zoin - Price EUR\n';
+        msg += 'Zoin - Price Euro\n';
         msg += '--------------------------\n\n';
         msg += 'EUR: €' + response.body.market_data.current_price.eur;
         msg += '```';
@@ -177,6 +181,36 @@ function hash(channelID){
         bot.sendMessage({ to: channelID, message: msg});
     }).catch(error => {
         console.log(error.response.body);
+    });
+}
+
+function znValue(channelID) {
+    getCoinmarketcapData(channelID,function(json){
+        
+        const usdPrice = toFixed(json[0].price_usd * 25000,2);
+        const btcPrice = toFixed(json[0].price_btc * 25000,2);
+        
+        var msg = '```md\n';
+        msg += 'Zoinode - Value\n'
+        msg += '---------------\n\n'
+        msg += 'USD: $' + numberWithCommas(usdPrice);
+        msg += '\nBTC: ₿' + btcPrice + '```';
+        
+        bot.sendMessage({to: channelID, message: msg});
+    })
+}
+
+function getCoinGeckoData(callback){
+    request.get('https://api.coingecko.com/api/v3/coins/zoin', (error, response, body) => {
+        if (error) { 
+            bot.sendMessage({
+                    to: channelID,
+                    message: '**Error:** CoinGecko API seems to be in trouble. Try again later!'
+                    });
+        } else {
+            const json = JSON.parse(body)
+            callback(json);
+        }
     });
 }
 
