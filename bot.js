@@ -49,6 +49,9 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             case 'priceEUR':
                 priceEUR(channelID);
                 break;
+            case 'priceGBP':
+                priceGBP(channelID);
+                break;
             case 'diff':
                 diff(channelID);
                 break;
@@ -75,6 +78,7 @@ function help(channelID){
     msg += '\n!price:       Zoin price and volume';
     msg += '\n!priceUSD:    Zoin price in USD';
     msg += '\n!priceEUR:    Zoin price in Euro';
+    msg += '\n!priceGBP:    Zoin price in GBP'
     msg += '\n!diff:        Zoin network difficullty';
     msg += '\n!block:       Zoin network block height';
     msg += '\n!hash:        Zoin network hashrate';
@@ -142,6 +146,20 @@ function priceEUR(channelID){
     });
 }
 
+function priceGBP(channelID){
+    got('https://api.coingecko.com/api/v3/coins/zoin', { json: true }).then(response => {
+        console.log(response.body.market_data.current_price.gbp);
+        var msg = '```md\n';;
+        msg += 'Zoin - Price GBP\n';
+        msg += '--------------------------\n\n';
+        msg += 'GBP: £' + response.body.market_data.current_price.gbp;
+        msg += '```';
+        bot.sendMessage({ to: channelID, message: msg});
+    }).catch(error => {
+        console.log(error.response.body);
+    });
+}
+
 function diff(channelID){
     got('http://explorer.official-zoin.org/api/getdifficulty', { json: true }).then(response => {
         console.log(response.body);
@@ -185,14 +203,14 @@ function hash(channelID){
 }
 
 function znValue(channelID) {
-    getCoinmarketcapData(channelID,function(json){
+    getCoinmarketcapData(function(json){
         
         const usdPrice = toFixed(json[0].price_usd * 25000,2);
         const btcPrice = toFixed(json[0].price_btc * 25000,2);
         
         var msg = '```md\n';
         msg += 'Zoinode - Value\n'
-        msg += '---------------\n\n'
+        msg += '--------------------------\n\n'
         msg += 'USD: $' + numberWithCommas(usdPrice);
         msg += '\nBTC: ₿' + btcPrice + '```';
         
