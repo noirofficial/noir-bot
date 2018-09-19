@@ -64,6 +64,9 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             case 'znValue':
                 znValue(channelID);
                 break;
+            case 'zn':
+                zn(channelID);
+                break;
             default: //do nothing
         }
     }
@@ -83,6 +86,7 @@ function help(channelID){
     msg += '\n!block:       Zoin network block height';
     msg += '\n!hash:        Zoin network hashrate';
     msg += '\n!znValue:     Zoinode Value';
+    msg += '\n!zn:          Zoinode Info';
     msg += '```';
     
     bot.sendMessage({to: channelID, message: msg});
@@ -218,8 +222,30 @@ function znValue(channelID) {
     })
 }
 
+function zn(channelID) {
+    getZoinodeData(function(json){
+       const masterNodeCount = toFixed(json.advStats.masterNodeCount);
+       const dailyReward = toFixed(json.stats.income.daily, 2);
+       const weeklyReward = toFixed(json.stats.income.weekly, 2);
+       const yearlyReward = toFixed(json.stats.income.yearly, 2);
+       const lockedCoins = toFixed(json.advStats.coinLocked.total);
+
+       var msg = '```md\n';
+        msg += 'Zoinode - Info\n'
+        msg += '--------------------------\n\n'
+        msg += 'Count: ' + masterNodeCount + '\n';
+        msg += 'Locked Coins: ' + lockedCoins + ' ZOI\n\n';
+        msg += 'Daily reward: ' + dailyReward + ' $\n';
+        msg += 'Weekly reward: ' + weeklyReward + ' $\n';
+        msg += 'Yearly reward: ' + yearlyReward + ' $\n';
+        msg += '```';
+        
+        bot.sendMessage({to: channelID, message: msg});
+    })
+}
+
 function getCoinGeckoData(callback){
-    request.get('https://api.coingecko.com/api/v3/coins/zoin', (error, response, body) => {
+    request.get('https://api.coingecko.co/api/v3/coins/zoin', (error, response, body) => {
         if (error) { 
             bot.sendMessage({
                     to: channelID,
@@ -244,6 +270,21 @@ function getCoinmarketcapData(callback) {
             callback(json);
         }
     });
+}
+
+function getZoinodeData(callback) {
+    request.get('https://masternodes.pro/apiv2/coin/stats/zoi/', (error, response, body) => {
+        if (error) { 
+            bot.sendMessage({
+                    to: channelID,
+                    message: '**Error:** Zoinode API seems to be in trouble. Try again later!'
+                    });
+        } else {
+            const json = JSON.parse(body)
+            callback(json);
+        }
+    });
+    
 }
 
 function toFixed(value, precision) {
