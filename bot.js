@@ -245,7 +245,7 @@ function zn(channelID) {
 }
 
 function getCoinGeckoData(callback){
-    request.get('https://api.coingecko.co/api/v3/coins/zoin', (error, response, body) => {
+    request.get('https://api.coingecko.com/api/v3/coins/zoin', (error, response, body) => {
         if (error) { 
             bot.sendMessage({
                     to: channelID,
