@@ -61,11 +61,11 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             case 'hash':
                 hash(channelID);
                 break;
-            case 'znValue':
-                znValue(channelID);
+            case 'nnValue':
+                nnValue(channelID);
                 break;
-            case 'zn':
-                zn(channelID);
+            case 'nn':
+                nn(channelID);
                 break;
             default: //do nothing
         }
@@ -74,19 +74,19 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
 function help(channelID){
     var msg = '```Markdown\n';
-    msg += 'Zoin-bot - Help\n';
+    msg += 'Noir-bot - Help\n';
     msg += '--------------------------------------\n\n';
     msg += 'Command List:\n';
     msg += '\n!help:        This command list';
-    msg += '\n!price:       Zoin price and volume';
-    msg += '\n!priceUSD:    Zoin price in USD';
-    msg += '\n!priceEUR:    Zoin price in Euro';
-    msg += '\n!priceGBP:    Zoin price in GBP'
-    msg += '\n!diff:        Zoin network difficullty';
-    msg += '\n!block:       Zoin network block height';
-    msg += '\n!hash:        Zoin network hashrate';
-    msg += '\n!znValue:     Zoinode Value';
-    msg += '\n!zn:          Zoinode Info';
+    msg += '\n!price:       Noir price and volume';
+    msg += '\n!priceUSD:    Noir price in USD';
+    msg += '\n!priceEUR:    Noir price in Euro';
+    msg += '\n!priceGBP:    Noir price in GBP'
+    msg += '\n!diff:        Noir network difficullty';
+    msg += '\n!block:       Noir network block height';
+    msg += '\n!hash:        Noir network hashrate';
+    msg += '\n!nnValue:     Noirnode Value';
+    msg += '\n!nn:          Noirnode Info';
     msg += '```';
     
     bot.sendMessage({to: channelID, message: msg});
@@ -104,17 +104,17 @@ function price(channelID){
         const market_cap_usd = json[0].market_cap_usd;
         
         var msg = '```md\n';
-        msg += 'Zoin - Price & Volume\n'
+        msg += 'Noir - Price & Volume\n'
         msg += '------------------------\n\n'
-        msg += '[Zoin - Price]\n\n'
+        msg += '[Noir - Price]\n\n'
         msg += 'USD: $' + usdPrice;
         msg += '\nBTC: ₿' + btcPrice;
         msg += '\n\n';
-        msg += '[Zoin - Price Change]\n\n';
+        msg += '[Noir - Price Change]\n\n';
         msg += 'Change  1 hour:  ' + percent_change_1h + '%\n';
         msg += 'Change 24 hours: ' + percent_change_24h + '%\n';    
         msg += 'Change  7 days:  ' + percent_change_7d + '%\n\n';
-        msg += '[Zoin - Volume]\n\n';
+        msg += '[Noir - Volume]\n\n';
         msg += '24h Volume: $' + numberWithCommas(volume_usd | 0) + '\n';
         msg += 'Marketcap:  $' + numberWithCommas(toFixed(market_cap_usd,2)) + '```';
         
@@ -126,7 +126,7 @@ function priceUSD(channelID){
     got('https://api.coingecko.com/api/v3/coins/zoin', { json: true }).then(response => {
         console.log(response.body.market_data.current_price.usd);
         var msg = '```md\n';
-        msg += 'Zoin - Price US Dollar\n';
+        msg += 'Noir - Price US Dollar\n';
         msg += '--------------------------\n\n';
         msg += 'USD: $' + response.body.market_data.current_price.usd;
         msg += '```';
@@ -140,7 +140,7 @@ function priceEUR(channelID){
     got('https://api.coingecko.com/api/v3/coins/zoin', { json: true }).then(response => {
         console.log(response.body.market_data.current_price.eur);
         var msg = '```md\n';;
-        msg += 'Zoin - Price Euro\n';
+        msg += 'Noir - Price Euro\n';
         msg += '--------------------------\n\n';
         msg += 'EUR: €' + response.body.market_data.current_price.eur;
         msg += '```';
@@ -154,7 +154,7 @@ function priceGBP(channelID){
     got('https://api.coingecko.com/api/v3/coins/zoin', { json: true }).then(response => {
         console.log(response.body.market_data.current_price.gbp);
         var msg = '```md\n';;
-        msg += 'Zoin - Price GBP\n';
+        msg += 'Noir - Price GBP\n';
         msg += '--------------------------\n\n';
         msg += 'GBP: £' + response.body.market_data.current_price.gbp;
         msg += '```';
@@ -168,7 +168,7 @@ function diff(channelID){
     got('http://explorer.official-zoin.org/api/getdifficulty', { json: true }).then(response => {
         console.log(response.body);
         var msg = '```md\n';;
-        msg += 'Zoin - Network Difficullty\n';
+        msg += 'Noir - Network Difficullty\n';
         msg += '--------------------------\n\n';
         msg += 'Difficullty: ' + response.body;
         msg += '```';
@@ -182,7 +182,7 @@ function block(channelID){
     got('http://explorer.official-zoin.org/api/getblockcount', { json: true }).then(response => {
         console.log(response.body);
         var msg = '```md\n';;
-        msg += 'Zoin - Network block height\n';
+        msg += 'Noir - Network block height\n';
         msg += '--------------------------\n\n';
         msg += 'Block height: ' + response.body;
         msg += '```';
@@ -196,7 +196,7 @@ function hash(channelID){
     got('http://explorer.official-zoin.org/api/getnetworkhashps', { json: true }).then(response => {
         console.log(response.body);
         var msg = '```md\n';;
-        msg += 'Zoin - Network hashrate\n';
+        msg += 'Noir - Network hashrate\n';
         msg += '--------------------------\n\n';
         msg += 'hashrate: ' + response.body;
         msg += '```';
@@ -206,14 +206,14 @@ function hash(channelID){
     });
 }
 
-function znValue(channelID) {
+function nnValue(channelID) {
     getCoinmarketcapData(function(json){
         
         const usdPrice = toFixed(json[0].price_usd * 25000,2);
         const btcPrice = toFixed(json[0].price_btc * 25000,2);
         
         var msg = '```md\n';
-        msg += 'Zoinode - Value\n'
+        msg += 'Noirnode - Value\n'
         msg += '--------------------------\n\n'
         msg += 'USD: $' + numberWithCommas(usdPrice);
         msg += '\nBTC: ₿' + btcPrice + '```';
@@ -222,8 +222,8 @@ function znValue(channelID) {
     })
 }
 
-function zn(channelID) {
-    getZoinodeData(function(json){
+function nn(channelID) {
+    getNoirnodeData(function(json){
        const masterNodeCount = toFixed(json.advStats.masterNodeCount);
        const dailyReward = toFixed(json.stats.income.daily, 2);
        const weeklyReward = toFixed(json.stats.income.weekly, 2);
@@ -231,7 +231,7 @@ function zn(channelID) {
        const lockedCoins = toFixed(json.advStats.coinLocked.total);
 
        var msg = '```md\n';
-        msg += 'Zoinode - Info\n'
+        msg += 'Noirnode - Info\n'
         msg += '--------------------------\n\n'
         msg += 'Count: ' + masterNodeCount + '\n';
         msg += 'Locked Coins: ' + lockedCoins + ' ZOI\n\n';
@@ -272,12 +272,12 @@ function getCoinmarketcapData(callback) {
     });
 }
 
-function getZoinodeData(callback) {
+function getNoirnodeData(callback) {
     request.get('https://masternodes.pro/apiv2/coin/stats/zoi/', (error, response, body) => {
         if (error) { 
             bot.sendMessage({
                     to: channelID,
-                    message: '**Error:** Zoinode API seems to be in trouble. Try again later!'
+                    message: '**Error:** Noirnode API seems to be in trouble. Try again later!'
                     });
         } else {
             const json = JSON.parse(body)
