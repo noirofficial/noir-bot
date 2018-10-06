@@ -234,7 +234,7 @@ function nn(channelID) {
         msg += 'Noirnode - Info\n'
         msg += '--------------------------\n\n'
         msg += 'Count: ' + masterNodeCount + '\n';
-        msg += 'Locked Coins: ' + lockedCoins + ' ZOI\n\n';
+        msg += 'Locked Coins: ' + lockedCoins + ' NOR\n\n';
         msg += 'Daily reward: ' + dailyReward + ' $\n';
         msg += 'Weekly reward: ' + weeklyReward + ' $\n';
         msg += 'Yearly reward: ' + yearlyReward + ' $\n';
