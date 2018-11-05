@@ -93,15 +93,15 @@ function help(channelID){
 }
 
 function price(channelID){
-    getCoinmarketcapData(function(json){
+    getCoinGeckoData(function(json){
         
-        const usdPrice = json[0].price_usd;
-        const btcPrice = json[0].price_btc;
-        const percent_change_1h = json[0].percent_change_1h;
-        const percent_change_24h = json[0].percent_change_24h;
-        const percent_change_7d = json[0].percent_change_7d;
-        const volume_usd = json[0]['24h_volume_usd'];
-        const market_cap_usd = json[0].market_cap_usd;
+        const usdPrice = json.market_data.current_price.usd;
+        const btcPrice = json.market_data.current_price.btc;
+        const percent_change_24h = json.market_data.price_change_percentage_24h;
+        const percent_change_7d = json.market_data.price_change_percentage_7d;
+        const percent_change_14d = json.market_data.price_change_percentage_14d;
+        const circulating_supply = json.market_data.circulating_supply;
+        const market_cap_usd = json.market_data.market_cap.usd;
         
         var msg = '```md\n';
         msg += 'Noir - Price & Volume\n'
@@ -111,11 +111,11 @@ function price(channelID){
         msg += '\nBTC: ₿' + btcPrice;
         msg += '\n\n';
         msg += '[Noir - Price Change]\n\n';
-        msg += 'Change  1 hour:  ' + percent_change_1h + '%\n';
-        msg += 'Change 24 hours: ' + percent_change_24h + '%\n';    
-        msg += 'Change  7 days:  ' + percent_change_7d + '%\n\n';
+        msg += 'Change  1 hour:  ' + percent_change_24h + '%\n';
+        msg += 'Change 24 hours: ' + percent_change_7d + '%\n';    
+        msg += 'Change  7 days:  ' + percent_change_14d + '%\n\n';
         msg += '[Noir - Volume]\n\n';
-        msg += '24h Volume: $' + numberWithCommas(volume_usd | 0) + '\n';
+        msg += 'Circulating supply: ' + circulating_supply + ' NOR' + '\n';
         msg += 'Marketcap:  $' + numberWithCommas(toFixed(market_cap_usd,2)) + '```';
         
         bot.sendMessage({to: channelID, message: msg});
@@ -123,7 +123,7 @@ function price(channelID){
 }
 
 function priceUSD(channelID){
-    got('https://api.coingecko.com/api/v3/coins/zoin', { json: true }).then(response => {
+    got('https://api.coingecko.com/api/v3/coins/bring', { json: true }).then(response => {
         console.log(response.body.market_data.current_price.usd);
         var msg = '```md\n';
         msg += 'Noir - Price US Dollar\n';
@@ -137,7 +137,7 @@ function priceUSD(channelID){
 }
 
 function priceEUR(channelID){
-    got('https://api.coingecko.com/api/v3/coins/zoin', { json: true }).then(response => {
+    got('https://api.coingecko.com/api/v3/coins/bring', { json: true }).then(response => {
         console.log(response.body.market_data.current_price.eur);
         var msg = '```md\n';;
         msg += 'Noir - Price Euro\n';
@@ -151,7 +151,7 @@ function priceEUR(channelID){
 }
 
 function priceGBP(channelID){
-    got('https://api.coingecko.com/api/v3/coins/zoin', { json: true }).then(response => {
+    got('https://api.coingecko.com/api/v3/coins/bring', { json: true }).then(response => {
         console.log(response.body.market_data.current_price.gbp);
         var msg = '```md\n';;
         msg += 'Noir - Price GBP\n';
@@ -165,7 +165,7 @@ function priceGBP(channelID){
 }
 
 function diff(channelID){
-    got('http://explorer.official-zoin.org/api/getdifficulty', { json: true }).then(response => {
+    got('http://explorer.noirofficial.org/api/getdifficulty', { json: true }).then(response => {
         console.log(response.body);
         var msg = '```md\n';;
         msg += 'Noir - Network Difficullty\n';
@@ -179,7 +179,7 @@ function diff(channelID){
 }
 
 function block(channelID){
-    got('http://explorer.official-zoin.org/api/getblockcount', { json: true }).then(response => {
+    got('http://explorer.noirofficial.org/api/getblockcount', { json: true }).then(response => {
         console.log(response.body);
         var msg = '```md\n';;
         msg += 'Noir - Network block height\n';
@@ -193,7 +193,7 @@ function block(channelID){
 }
 
 function hash(channelID){
-    got('http://explorer.official-zoin.org/api/getnetworkhashps', { json: true }).then(response => {
+    got('http://explorer.noirofficial.org/api/getnetworkhashps', { json: true }).then(response => {
         console.log(response.body);
         var msg = '```md\n';;
         msg += 'Noir - Network hashrate\n';
@@ -207,10 +207,10 @@ function hash(channelID){
 }
 
 function nnValue(channelID) {
-    getCoinmarketcapData(function(json){
+    getCoinGeckoData(function(json){
         
-        const usdPrice = toFixed(json[0].price_usd * 25000,2);
-        const btcPrice = toFixed(json[0].price_btc * 25000,2);
+        const usdPrice = toFixed(json.market_data.current_price.usd * 25000,2);
+        const btcPrice = toFixed(json.market_data.current_price.btc * 25000,2);
         
         var msg = '```md\n';
         msg += 'Noirnode - Value\n'
@@ -245,7 +245,7 @@ function nn(channelID) {
 }
 
 function getCoinGeckoData(callback){
-    request.get('https://api.coingecko.com/api/v3/coins/zoin', (error, response, body) => {
+    request.get('https://api.coingecko.com/api/v3/coins/bring', (error, response, body) => {
         if (error) { 
             bot.sendMessage({
                     to: channelID,
@@ -258,22 +258,8 @@ function getCoinGeckoData(callback){
     });
 }
 
-function getCoinmarketcapData(callback) {
-    request.get('https://api.coinmarketcap.com/v1/ticker/zoin', (error, response, body) => {
-        if (error) { 
-            bot.sendMessage({
-                    to: channelID,
-                    message: '**Error:** CoinMarketCap API seems to be in trouble. Try again later!'
-                    });
-        } else {
-            const json = JSON.parse(body)
-            callback(json);
-        }
-    });
-}
-
 function getNoirnodeData(callback) {
-    request.get('https://masternodes.pro/apiv2/coin/stats/zoi/', (error, response, body) => {
+    request.get('https://masternodes.pro/apiv2/coin/stats/nor/', (error, response, body) => {
         if (error) { 
             bot.sendMessage({
                     to: channelID,
