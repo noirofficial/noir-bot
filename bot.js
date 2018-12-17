@@ -224,13 +224,16 @@ function nnValue(channelID) {
 
 function nn(channelID) {
     getNoirnodeData(function(json){
-       const masterNodeCount = toFixed(json.advStats.masterNodeCount);
-       const dailyReward = toFixed(json.stats.income.daily, 2);
-       const weeklyReward = toFixed(json.stats.income.weekly, 2);
-       const yearlyReward = toFixed(json.stats.income.yearly, 2);
-       const lockedCoins = toFixed(json.advStats.coinLocked.total);
+       const check = json.authCheck.ph;
 
-       var msg = '```md\n';
+       if (check === "true"){
+        const masterNodeCount = toFixed(json.advStats.masterNodeCount);
+        const dailyReward = toFixed(json.stats.income.daily, 2);
+        const weeklyReward = toFixed(json.stats.income.weekly, 2);
+        const yearlyReward = toFixed(json.stats.income.yearly, 2);
+        const lockedCoins = toFixed(json.advStats.coinLocked.total);
+
+        var msg = '```md\n';
         msg += 'Noirnode - Info\n'
         msg += '--------------------------\n\n'
         msg += 'Count: ' + masterNodeCount + '\n';
@@ -239,8 +242,14 @@ function nn(channelID) {
         msg += 'Weekly reward: ' + weeklyReward + ' $\n';
         msg += 'Yearly reward: ' + yearlyReward + ' $\n';
         msg += '```';
-        
-        bot.sendMessage({to: channelID, message: msg});
+       } else {
+        var msg = '```md\n';
+        msg += 'Noirnode - Info\n'
+        msg += '--------------------------\n\n'
+        msg += 'Failed to load Noirnode info\n';
+        msg += '```';
+       }       
+       bot.sendMessage({to: channelID, message: msg});
     })
 }
 
